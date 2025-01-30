@@ -4,7 +4,6 @@
 # Programovani NPRG030
 
 
-import pygame
 from settings import TILE_SIZE
 
 
@@ -16,7 +15,7 @@ class Tile:
         self.target_x, self.target_y = pos  # Where it should move
         self.grid_pos = grid_pos  # Grid position (row, col)
         self.is_empty = is_empty
-        self.speed = 10  # Pixels per frame
+        self.speed = TILE_SIZE / 5  # Fraction of length per frame
 
     def is_moving(self):
         """Check if the tile is still moving."""
