@@ -20,8 +20,14 @@ def load_random_image():
 
     image = pygame.image.load(random.choice(images)).convert()
 
+    # Crop the image to avoid stretching during resizing
+    width, height = image.get_size()
+    crop_size = min(width, height)
+    crop_rect = pygame.Rect(0, 0, crop_size, crop_size)
+    cropped_image = image.subsurface(crop_rect).copy()
+
     # Resize the image to exactly match the grid dimensions
-    return pygame.transform.smoothscale(image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    return pygame.transform.smoothscale(cropped_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 def slice_image(image):
