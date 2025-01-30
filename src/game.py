@@ -19,10 +19,10 @@ class Game:
         self.clock = pygame.time.Clock()
 
         # Predefined variables, values assigned in reset
-        self.image = None
-        self.tiles = None
-        self.grid = None
-        self.tiles_objs = None
+        self.image = None   # Image used for the current game
+        self.tiles = None   # Tile images
+        self.grid = None    # 2D list of numbers
+        self.tiles_objs = None  # List of individual tiles
         self.solved = False
 
         self.reset_game()
