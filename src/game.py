@@ -24,6 +24,7 @@ class Game:
         self.grid = None    # 2D list of numbers
         self.tiles_objs = None  # List of individual tiles
         self.solved = False
+        self.button_rect = None     # Restart button rectangle
 
         self.reset_game()
 
@@ -88,6 +89,27 @@ class Game:
         text_rect = text_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
         self.screen.blit(text_surface, text_rect)
 
+        # Draw restart button
+        self.draw_restart_button()
+
+    def draw_restart_button(self):
+        """Draw a restart button on the screen."""
+        button_color = (100, 200, 100)
+        text_color = (255, 255, 255)
+        font = pygame.font.Font(None, 40)
+
+        self.button_rect = pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 50, 200, 50)
+        pygame.draw.rect(self.screen, button_color, self.button_rect, border_radius=10)
+
+        text = font.render("Restart", True, text_color)
+        text_rect = text.get_rect(center=self.button_rect.center)
+        self.screen.blit(text, text_rect)
+
+    def handle_restart_click(self, event):
+        """Check if the restart button is clicked and reset the game."""
+        if self.button_rect.collidepoint(event.pos):
+            self.reset_game()
+
     def draw(self):
         """Draw the puzzle or victory screen."""
         self.screen.fill(BACKGROUND_COLOR)
@@ -111,7 +133,10 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    self.handle_click(event.pos)
+                    if self.solved:
+                        self.handle_restart_click(event)
+                    else:
+                        self.handle_click(event.pos)
 
             self.draw()
             pygame.display.flip()
