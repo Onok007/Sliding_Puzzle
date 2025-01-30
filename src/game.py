@@ -52,6 +52,9 @@ class Game:
 
     def handle_click(self, pos):
         """Handle user click on a tile."""
+        if any(tile.is_moving() for tile in self.tiles_objs):
+            return
+
         row, col = pos[1] // TILE_SIZE, pos[0] // TILE_SIZE
         empty_tile = next(tile for tile in self.tiles_objs if tile.is_empty)
         empty_row, empty_col = empty_tile.grid_pos
@@ -60,7 +63,10 @@ class Game:
             # Swap tiles
             clicked_tile = next(tile for tile in self.tiles_objs if tile.grid_pos == (row, col))
             clicked_tile.grid_pos, empty_tile.grid_pos = empty_tile.grid_pos, clicked_tile.grid_pos
-            clicked_tile.pos, empty_tile.pos = empty_tile.pos, clicked_tile.pos
+
+            # Set target positions for animation
+            clicked_tile.target_x, clicked_tile.target_y = empty_tile.x, empty_tile.y
+            empty_tile.target_x, empty_tile.target_y = clicked_tile.x, clicked_tile.y
 
             # Check for victory after each move
             if self.check_victory():
@@ -150,6 +156,9 @@ class Game:
                         self.handle_restart_click(event)
                     else:
                         self.handle_click(event.pos)
+
+            for tile in self.tiles_objs:
+                tile.update()
 
             self.draw()
             pygame.display.flip()
