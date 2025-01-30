@@ -18,7 +18,17 @@ class Game:
         pygame.display.set_caption("Sliding Puzzle")
         self.clock = pygame.time.Clock()
 
-        # Load and prepare puzzle
+        # Predefined variables, values assigned in reset
+        self.image = None
+        self.tiles = None
+        self.grid = None
+        self.tiles_objs = None
+        self.solved = False
+
+        self.reset_game()
+
+    def reset_game(self):
+        """Reset the game state to start a new round."""
         self.image = load_random_image()
         self.tiles = slice_image(self.image)
         self.grid = shuffle_puzzle()
