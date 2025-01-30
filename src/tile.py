@@ -24,7 +24,6 @@ class Tile:
 
     def update(self):
         """Move tile towards its target position smoothly."""
-        # if self.is_moving():
         if abs(self.x - self.target_x) < self.speed:
             self.x = self.target_x  # Snap to target
         else:
