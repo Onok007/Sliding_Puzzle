@@ -65,6 +65,7 @@ class Game:
             # Check for victory after each move
             if self.check_victory():
                 self.solved = True  # Stop further interactions
+                self.fade_in_full_image()
 
     def check_victory(self):
         """Check if the tiles are in the correct order."""
@@ -74,6 +75,22 @@ class Game:
             if not tile.is_empty and self.tiles.index(tile.image) != expected_index:
                 return False
         return True
+
+    def fade_in_full_image(self, duration=2000):
+        """Fades in the full image over the given duration (in milliseconds)."""
+        fade_surface = self.image.copy()
+        alpha = 0
+        start_time = pygame.time.get_ticks()
+
+        while alpha < 255:
+            elapsed = pygame.time.get_ticks() - start_time
+            alpha = min(255, int((elapsed / duration) * 255))
+            fade_surface.set_alpha(alpha)
+
+            self.screen.fill((0, 0, 0))
+            self.screen.blit(fade_surface, (0, 0))
+            pygame.display.flip()
+            self.clock.tick(60)
 
     def show_victory_popup(self):
         """Display a semi-transparent pop-up when the puzzle is solved."""
@@ -115,13 +132,9 @@ class Game:
         self.screen.fill(BACKGROUND_COLOR)
 
         if self.solved:
-            # Draw the full image instead of the tiles
             self.screen.blit(self.image, (0, 0))
-
-            # Display victory popup
             self.show_victory_popup()
         else:
-            # Draw tiles
             for tile in self.tiles_objs:
                 tile.draw(self.screen)
 
